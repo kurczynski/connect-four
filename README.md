@@ -1,2 +1,2 @@
 # connect-four
-Connect Four game
+Uses different artificial intelligence methods to play Connect Four against a human player.
