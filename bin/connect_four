@@ -7,14 +7,65 @@ class GameBoard(object):
 	ROWS = 6
 	COLUMNS = 7
 
+	player_color = None
+	agent_color = None
+
 	board = None
 
 	def __init__(self):
-		self.board = [[Checker.empty for i in range(self.ROWS)] for j in range(self.COLUMNS)]
+		self.board = \
+			[[Checker.empty for i in range(self.ROWS)] for j in
+			 range(self.COLUMNS)]
 
 	def print(self):
+		"""
+		Prints the game board to stdout.
+		"""
+
 		for row in self.board:
 			print(row)
+
+	def add_checker(self, checker, column):
+		"""
+		Adds a checker to the specified column.
+		:param checker: the checker being placed into the game board.
+		:param column: the column on the game board that the checker is being placed into.
+		"""
+
+		for row in reversed(self.board):
+			if row[column] is Checker.empty:
+				row[column] = checker
+
+				return True
+
+		return False
+
+
+class UserInterface(object):
+	@staticmethod
+	def prompt_choice(prompt_string, max_choice, min_choice=1):
+		choice = None
+
+		while True:
+			# TODO: Make sure input in numerical.
+			choice = int(input(prompt_string))
+
+			if max_choice >= choice >= min_choice:
+				break
+			else:
+				print('Invalid choice.')
+
+		return choice
+
+	def get_checker_choice(self):
+		prompt_string = ('Which color checker would you like to use?\n'
+		                 '1) ' + Checker.yellow.name + '\n'
+                         '2) ' + Checker.red.name + '\n'
+		                 )
+
+		choice = self.prompt_choice(prompt_string, 2)
+
+		return Checker.yellow if choice == 1 else Checker.red
 
 
 @unique
@@ -25,5 +76,8 @@ class Checker(Enum):
 
 
 if __name__ == '__main__':
+	userInterface = UserInterface()
 	gameBoard = GameBoard()
 	gameBoard.print()
+	userInterface.prompt_choice(
+		'Which checker would you like to use?\n1) Red\n2) Yellow\n', 2)
