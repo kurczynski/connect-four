@@ -1,1 +1,29 @@
 #!/usr/bin/env python
+
+from enum import Enum, unique
+
+
+class GameBoard(object):
+	ROWS = 6
+	COLUMNS = 7
+
+	board = None
+
+	def __init__(self):
+		self.board = [[Checker.empty for i in range(self.ROWS)] for j in range(self.COLUMNS)]
+
+	def print(self):
+		for row in self.board:
+			print(row)
+
+
+@unique
+class Checker(Enum):
+	red = 0xff0000
+	yellow = 0xffff00
+	empty = -1
+
+
+if __name__ == '__main__':
+	gameBoard = GameBoard()
+	gameBoard.print()
