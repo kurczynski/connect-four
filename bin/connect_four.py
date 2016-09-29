@@ -72,17 +72,19 @@ class GameBoard(object):
 				previous = space
 
 		previous = None
-		counter = 0
+		counter = 1
 
 		# Check vertical wins.
-		for space in self.board:
-			for column in range(self.COLUMNS - 1):
+		for column in range(self.COLUMNS - 1):
+			for row in range(self.ROWS - 1):
+				space = self.board[row][column]
+
 				if space == Checker.empty:
 					break
 				elif space == previous:
 					counter += 1
 				else:
-					counter = 0
+					counter = 1
 
 				if counter == self.CONNECT_COUNT:
 					return space
