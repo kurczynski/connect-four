@@ -54,8 +54,9 @@ class GameBoard(object):
 		"""
 
 		previous = None
-		counter = 1
+		counter = 0
 
+		# Check horizontal wins.
 		for row in self.board:
 			for space in row:
 				if space == Checker.empty:
@@ -63,7 +64,25 @@ class GameBoard(object):
 				elif space == previous:
 					counter += 1
 				else:
-					counter = 1
+					counter = 0
+
+				if counter == self.CONNECT_COUNT:
+					return space
+
+				previous = space
+
+		previous = None
+		counter = 0
+
+		# Check vertical wins.
+		for space in self.board:
+			for column in range(self.COLUMNS - 1):
+				if space == Checker.empty:
+					break
+				elif space == previous:
+					counter += 1
+				else:
+					counter = 0
 
 				if counter == self.CONNECT_COUNT:
 					return space
@@ -71,7 +90,6 @@ class GameBoard(object):
 				previous = space
 
 		return None
-
 
 
 class UserInterface(object):
@@ -163,19 +181,9 @@ if __name__ == '__main__':
 	game_board = GameBoard()
 
 	game_board.add_checker(Checker.yellow, 0)
-	game_board.print()
-	print(game_board.check_winner())
-
-	game_board.add_checker(Checker.yellow, 1)
-	game_board.add_checker(Checker.red, 2)
-	game_board.add_checker(Checker.yellow, 3)
-	game_board.print()
-	print(game_board.check_winner())
-
 	game_board.add_checker(Checker.yellow, 0)
-	game_board.add_checker(Checker.yellow, 1)
-	game_board.add_checker(Checker.yellow, 2)
-	game_board.add_checker(Checker.yellow, 3)
+	game_board.add_checker(Checker.yellow, 0)
+	game_board.add_checker(Checker.yellow, 0)
 	game_board.print()
 	print(game_board.check_winner())
 
