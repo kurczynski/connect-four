@@ -125,27 +125,69 @@ class GameBoard(object):
         Checks if there is a diagonal win on the game board.
         :return: the checker that has won the game. If the game has not yet been won, returns None.
         """
-        
+
         previous = None
         counter = 1
 
-        for row in range(self.ROWS - 1):
-            for column in range((self.COLUMNS - 1) - row):
+        for column in range(self.COLUMNS - 1):
+            for row in range(self.ROWS - 1):
+                # Check upward right diagonals (/)
+                for checker in range(GameBoard.CONNECT_COUNT):
+                    if row > self.ROWS or column > self.COLUMNS:
+                        break
 
-                space = self.board[row][column]
+                    space = self.board[row][column]
 
-                if space == Checker.empty:
-                    break
-                elif space == previous:
-                    counter += 1
-                else:
-                    counter = 1
+                    if space == Checker.empty:
+                        break
+                    elif space == previous:
+                        counter += 1
+                    else:
+                        counter = 1
 
-                if counter == self.CONNECT_COUNT:
-                    return space
+                    row += 1
+                    column += 1
 
-                previous = space
-                row += 1
+                # Check upward left diagonals (\)
+                for checker in range(GameBoard.CONNECT_COUNT):
+                    if row > self.ROWS or column < 0:
+                        break
+
+                    space = self.board[row][column]
+
+                    if space == Checker.empty:
+                        break
+                    elif space == previous:
+                        counter += 1
+                    else:
+                        counter = 1
+
+                    row += 1
+                    column -= 1
+
+        return None
+
+    def check_win(self, row_offset, column_offset) -> Checker:
+        previous = None
+        counter = 1
+
+        for column in range(self.COLUMNS - 1):
+            for row in range(self.ROWS - 1):
+                for checker in range(GameBoard.CONNECT_COUNT):
+                    space = self.board[row][column]
+
+                    if space == Checker.empty:
+                        break
+                    elif space == previous:
+                        counter += 1
+                    else:
+                        counter = 1
+
+                    if counter == self.CONNECT_COUNT:
+                        return space
+
+                    row += row_offset
+                    column += column_offset
 
         return None
 
