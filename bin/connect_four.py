@@ -94,18 +94,24 @@ class GameBoard(object):
         """
         row_offset = direction.value[0]
         column_offset = direction.value[1]
-        previous = None
         counter = 1
 
-        for column in range(self.COLUMNS - 1):
-            for row in range(self.ROWS - 1):
+        for start_column in range(self.COLUMNS):
+            for start_row in range(self.ROWS):
+                column = start_column
+                row = start_row
+                previous = None
+
                 for checker in range(GameBoard.CONNECT_COUNT):
                     space = self.board[row][column]
 
-                    if space == previous and space != Checker.empty:
+                    # FIXME: This logic is kind of confusing.
+                    if space == Checker.empty:
+                        break
+                    elif space == previous:
                         counter += 1
-                    else:
-                        counter = 1
+                    elif previous is not None:
+                        break
 
                     if counter == self.CONNECT_COUNT:
                         return space
