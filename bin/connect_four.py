@@ -38,7 +38,7 @@ class GameBoard(object):
         Prints the game board to stdout.
         """
 
-        for row in reversed(self.board):
+        for row in self.board:
             print(row)
 
     def add_checker(self, checker: Checker, column: int) -> bool:
@@ -48,35 +48,45 @@ class GameBoard(object):
         :param column: the column on the game board that the checker is being placed into.
         """
 
-        for row in self.board:
-            if row[column] is Checker.empty:
-                row[column] = checker
+        # (0,0) of the 2D array is in the "top left corner", so go backwards to travel bottom up.
+        for row in range(self.ROWS - 1, 0, -1):
+            if self.board[row][column] is Checker.empty:
+                self.board[row][column] = checker
 
                 return True
 
         return False
 
-    def check_winner(self) -> Checker:
+    def clear_board(self):
+        """
+        Clears the board of all checkers, i.e. all spaces are set to empty.
+        """
+
+        for column in range(self.COLUMNS - 1):
+            for row in range(self.ROWS - 1):
+                self.board[row][column] = Checker.empty
+
+    def check_all_wins(self) -> Checker:
         """
         Checks if the game board has a winner in its current state (i.e. the game is in a terminal state).
         :return: the checker that has won the game. If the game has not yet been won, returns None.
         """
 
-        winner = self.check_vertical_win()
+        winner = self.check_win(Direction.horizontal)
         if winner is not None:
             return winner
 
-        winner = self.check_horizontal_win()
+        winner = self.check_win(Direction.vertical)
         if winner is not None:
             return winner
 
-        winner = self.check_diagonal_win()
+        winner = self.check_win(Direction.horizontal)
         if winner is not None:
             return winner
 
         return None
 
-    def get_winner(self, direction: Direction) -> Checker:
+    def check_win(self, direction: Direction) -> Checker:
         """
         Checks if there is a win on the board in the specified direction.
         :param direction: the direction to check for the winner.
@@ -92,7 +102,7 @@ class GameBoard(object):
                 for checker in range(GameBoard.CONNECT_COUNT):
                     space = self.board[row][column]
 
-                    if space == previous:
+                    if space == previous and space != Checker.empty:
                         counter += 1
                     else:
                         counter = 1
