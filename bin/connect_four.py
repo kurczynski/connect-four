@@ -49,7 +49,7 @@ class GameBoard(object):
         """
 
         # (0,0) of the 2D array is in the "top left corner", so go backwards to travel bottom up.
-        for row in range(self.ROWS - 1, 0, -1):
+        for row in range(self.ROWS - 1, -1, -1):
             if self.board[row][column] is Checker.empty:
                 self.board[row][column] = checker
 
@@ -62,8 +62,8 @@ class GameBoard(object):
         Clears the board of all checkers, i.e. all spaces are set to empty.
         """
 
-        for column in range(self.COLUMNS - 1):
-            for row in range(self.ROWS - 1):
+        for column in range(self.COLUMNS):
+            for row in range(self.ROWS):
                 self.board[row][column] = Checker.empty
 
     def check_all_wins(self) -> Checker:
